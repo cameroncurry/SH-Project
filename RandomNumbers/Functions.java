@@ -1,10 +1,15 @@
 
-class Poisson implements IntegerFunction {
+class PoissonGenerator extends IntegerRandomGenerator {
 
 	private double lambda;
 	
-	public Poisson(double lambda){
+	public PoissonGenerator(double fmax, int xMin, int xMax,double lambda){
+		super(fmax,xMin,xMax);
 		this.lambda = lambda;
+	}
+	
+	public void setLambda(double l){
+		this.lambda = l;
 	}
 	
 	public double evaluate(int x) {

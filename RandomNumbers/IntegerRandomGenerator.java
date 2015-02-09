@@ -1,26 +1,23 @@
 import java.util.Random;
 
-//same as Function but restricted to integer x values
-interface IntegerFunction {
-	public double evaluate(int x);
-}
 
-public class IntegerRandomGenerator {
+abstract class IntegerRandomGenerator {
 
-	private IntegerFunction f;
+	
 	private Random random;
 	
 	private double fmax;
 	private int rangeMin, rangeMax;
 	
-	public IntegerRandomGenerator(IntegerFunction f, double fmax, int xMin, int xMax){
-		this.f = f;
+	public IntegerRandomGenerator(double fmax, int xMin, int xMax){	
 		random = new Random();
 		
 		this.fmax = fmax;
 		this.rangeMin = xMin;
 		this.rangeMax = xMax;
 	}
+	
+	abstract double evaluate(int x);
 	
 	public int nextInt(){
 		int result = 0;
@@ -31,7 +28,7 @@ public class IntegerRandomGenerator {
 		do{
 			int randX = random.nextInt(rangeMax+1)+rangeMin; //random int between min and max (both inclusive)
 			
-			randY1 = f.evaluate(randX);
+			randY1 = this.evaluate(randX);
 			randY2 = random.nextDouble()*fmax;
 			
 			result = randX;

@@ -2,7 +2,6 @@
 public class Team implements Comparable<Team> {
 
 	private double skill;
-	private IntegerRandomGenerator poisson;
 	
 	private int points;
 	private int goalsFor;
@@ -10,7 +9,6 @@ public class Team implements Comparable<Team> {
 	
 	public Team(double skill) {
 		this.skill = skill;
-		this.poisson = new IntegerRandomGenerator(new Poisson(skill), 1, 0, (int)skill*2);
 	}
 	
 	public double skill(){return skill;}
@@ -27,7 +25,8 @@ public class Team implements Comparable<Team> {
 	}
 	
 	//returns number of goals scored against opponent
-	public int playOpponent(Team opponent){
+	public int playOpponent(PoissonGenerator poisson, Team opponent){
+		poisson.setLambda(this.skill);
 		return poisson.nextInt();
 	}
 	
@@ -44,34 +43,16 @@ public class Team implements Comparable<Team> {
 	}
 	
 
-	//comparable
+	//compare teams against their intrinsic skill
 	public int compareTo(Team o) {
-		if(points > o.points()){
+		if(this.skill > o.skill()){
 			return -1;
 		}
-		else if(points < o.points()){
-			return +1;
+		else if(this.skill < o.skill()){
+			return 1;
 		}
-		else { // points are equal
-			
-			if(goalDifference() > o.goalDifference()){
-				return -1;
-			}
-			else if(goalDifference() < o.goalDifference()){
-				return +1;
-			}
-			else{ // goals difference is equal
-				
-				if(goalsFor > o.goalsFor()){
-					return -1;
-				}
-				else if(goalsFor < o.goalsFor()){
-					return +1;
-				}
-				else{
-					return 0; // teams are equal
-				}
-			}
+		else{
+			return 0;
 		}
 	}
 
