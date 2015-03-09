@@ -7,6 +7,7 @@ public class EPL extends Tournament {
 	
 	//each team plays every other team twice
 	public void run(){
+		
 		for(int i=0; i<teams.length;i++){
 			for(int j=0;j<teams.length;j++){
 				if(i != j){//team doesn't play itself but plays others twice
@@ -14,6 +15,7 @@ public class EPL extends Tournament {
 				}
 			}
 		}
+		
 	}
 
 }

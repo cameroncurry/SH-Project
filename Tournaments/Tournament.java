@@ -14,6 +14,16 @@ public class Tournament implements Runnable {
 	//only have 1 instance of a random number generator to avoid random number bias between multiple instances of Random
 	protected PoissonGenerator poisson;
 	
+	
+	//parameters from calibration
+	double meanX = 1.248;
+	double meanY = 1.36-1.25;
+	//double meanY = 1.36;
+	//double theta = -27.66 * Math.PI/180.;
+	double theta = -60.0 * Math.PI/180.;
+	double sinTheta = Math.sin(theta);
+	double cosTheta = Math.cos(theta);
+	
 	public Tournament(Team[] teams){
 		this.teams = teams;
 		this.poisson = new PoissonGenerator(1,0,10,1);
@@ -41,9 +51,34 @@ public class Tournament implements Runnable {
 	}
 	
 	
-	protected void playGame(Team a, Team b){
-		int goalsA = a.playOpponent(poisson,b);
-		int goalsB = b.playOpponent(poisson,a);
+	public void playGame(Team a, Team b){
+		
+		int goalsA = 0;
+		int goalsB = 0;
+		
+		if(a.skill() > b.skill()){
+			//calculate relative skill vs. opponent
+			double relativeSkillA = (a.skill()-meanX)*cosTheta - (b.skill()-meanY)*sinTheta;
+			double relativeSkillB = (a.skill()-meanX)*sinTheta + (b.skill()-meanY)*cosTheta;
+		
+			poisson.setLambda(relativeSkillA+meanX);
+			goalsA = poisson.nextInt();
+			poisson.setLambda(relativeSkillB+meanY);
+			goalsB = poisson.nextInt();
+		}
+		else {
+			double relativeSkillB = (b.skill()-meanX)*cosTheta - (a.skill()-meanY)*sinTheta;
+			double relativeSkillA = (b.skill()-meanX)*sinTheta + (a.skill()-meanY)*cosTheta;
+		
+			poisson.setLambda(relativeSkillA+meanX);
+			goalsA = poisson.nextInt();
+			poisson.setLambda(relativeSkillB+meanY);
+			goalsB = poisson.nextInt();
+		}
+		
+		//int goalsA = a.playOpponent(poisson, b);
+		//int goalsB = b.playOpponent(poisson, a);
+		
 		
 		//tie
 		if(goalsA == goalsB){
@@ -90,9 +125,9 @@ public class Tournament implements Runnable {
 		}
 	}
 	
-	public static Team[] createGaussianTeams(int n){
-		Function gauss = new Gaussian(2,1);
-		RandomGenerator gen = new RandomGenerator(gauss, 1.1,0,10);
+	public static Team[] createGaussianTeams(int n, double mean, double sigma, double xmin, double xmax){
+		Function gauss = new Gaussian(mean,sigma);
+		RandomGenerator gen = new RandomGenerator(gauss, 1.1,xmin,xmax);
 		Team[] teams = new Team[n];
 		
 		for(int i=0; i<n; i++){
@@ -102,6 +137,16 @@ public class Tournament implements Runnable {
 		return teams;
 	}
 	
+	public static Team[] createSkewTeams(int n, double mean, double sigma, double alpha, double xMin, double xMax){
+		Function skew = new SkewNormal(mean,sigma,alpha);
+		RandomGenerator gen = new RandomGenerator(skew,1.4,xMin,xMax);
+		Team[] teams = new Team[n];
+		
+		for(int i=0;i<n;i++){
+			teams[i] = new Team(gen.nextDouble());
+		}
+		return teams;
+	}
 	
 	//compares teams based on performance in tournament
 	public static Comparator<Team> tournamentRanking = new Comparator<Team>(){

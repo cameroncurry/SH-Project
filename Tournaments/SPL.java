@@ -33,12 +33,15 @@ public class SPL extends Tournament {
 		for(int i=0;i<teams.length;i++){
 			for(int j=0;j<teams.length;j++){
 				if(i != j && i<j){
+					//playGame(teams[i],teams[j]);
+					
 					if(i<teams.length/2 && j<teams.length/2){
 						playGame(teams[i],teams[j]);
 					}
 					else if(i>=teams.length/2 && j>=teams.length/2){
 						playGame(teams[i],teams[j]);
 					}
+					
 				}
 			}
 		}
