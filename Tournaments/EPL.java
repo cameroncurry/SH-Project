@@ -7,6 +7,7 @@ public class EPL extends Tournament {
 	
 	//each team plays every other team twice
 	public void run(){
+		for(int l=0;l<1;l++){
 		
 		for(int i=0; i<teams.length;i++){
 			for(int j=0;j<teams.length;j++){
@@ -15,7 +16,7 @@ public class EPL extends Tournament {
 				}
 			}
 		}
-		
+		}
 	}
 
 }

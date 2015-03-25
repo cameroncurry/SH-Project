@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 
 
@@ -25,11 +24,6 @@ public class Calibration {
 		}
 		
 		p.close();
-		
-		Runtime r = Runtime.getRuntime();
-		r.exec("python PointsHist.py");
-		r.exec("python FitGoals.py");
-		
 	}
 
 }

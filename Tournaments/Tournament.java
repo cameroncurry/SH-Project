@@ -40,6 +40,10 @@ public class Tournament implements Runnable {
 		}
 	}
 	
+	public Team[] getTeams(){
+		return teams;
+	}
+	
 	public void sortTeams(){
 		Arrays.sort(teams,tournamentRanking);
 	}
@@ -55,7 +59,7 @@ public class Tournament implements Runnable {
 		
 		int goalsA = 0;
 		int goalsB = 0;
-		
+		/*
 		if(a.skill() > b.skill()){
 			//calculate relative skill vs. opponent
 			double relativeSkillA = (a.skill()-meanX)*cosTheta - (b.skill()-meanY)*sinTheta;
@@ -75,9 +79,9 @@ public class Tournament implements Runnable {
 			poisson.setLambda(relativeSkillB+meanY);
 			goalsB = poisson.nextInt();
 		}
-		
-		//int goalsA = a.playOpponent(poisson, b);
-		//int goalsB = b.playOpponent(poisson, a);
+		*/
+		goalsA = a.playOpponent(poisson, b);
+		goalsB = b.playOpponent(poisson, a);
 		
 		
 		//tie
@@ -95,9 +99,48 @@ public class Tournament implements Runnable {
 		}
 	}
 	
+	//returns 0 for team a win and 1 for team b win
+	public int playWithoutTie(Team a, Team b){
+		int goalsA = 0;
+		int goalsB = 0;
+		
+		do{
+			if(a.skill() > b.skill()){
+				//calculate relative skill vs. opponent
+				double relativeSkillA = (a.skill()-meanX)*cosTheta - (b.skill()-meanY)*sinTheta;
+				double relativeSkillB = (a.skill()-meanX)*sinTheta + (b.skill()-meanY)*cosTheta;
+		
+				poisson.setLambda(relativeSkillA+meanX);
+				goalsA = poisson.nextInt();
+				poisson.setLambda(relativeSkillB+meanY);
+				goalsB = poisson.nextInt();
+			}
+			else {
+				double relativeSkillB = (b.skill()-meanX)*cosTheta - (a.skill()-meanY)*sinTheta;
+				double relativeSkillA = (b.skill()-meanX)*sinTheta + (a.skill()-meanY)*cosTheta;
+		
+				poisson.setLambda(relativeSkillA+meanX);
+				goalsA = poisson.nextInt();
+				poisson.setLambda(relativeSkillB+meanY);
+				goalsB = poisson.nextInt();
+			}
+		}while(goalsA == goalsB); // keep playing until teams don't tie
+		
+		if(goalsA > goalsB){ //a wins
+			a.incrementStats(3, goalsA, goalsB);
+			b.incrementStats(0, goalsB, goalsA);
+			return 0;
+		}
+		else{ //b wins
+			a.incrementStats(0, goalsA, goalsB);
+			b.incrementStats(3, goalsB, goalsA);
+			return 1;
+		}
+	}
+	
 	public double deviationOfTeams(){
 		//make copy of team array
-		Team[] teams = Arrays.copyOf(this.teams,this.teams.length);
+		Team[] teams = Team.copyOf(this.teams,this.teams.length);
 		Arrays.sort(teams); // sort teams in order of skill
 		this.sortTeams(); // sort teams in tournament rankings
 		
@@ -123,6 +166,16 @@ public class Tournament implements Runnable {
 		for(int i=0; i<teams.length; i++){
 			System.out.println(teams[i]);
 		}
+	}
+	
+	//the maximum deviation a tournament with N teams
+	public static double maxDeviation(int N){
+		double sum = 0;
+		for(int i=0;i<N/2;i++){
+			sum += Math.pow(2*i+1-N,2);
+		}
+		
+		return Math.sqrt(2*sum/(double)N);
 	}
 	
 	public static Team[] createGaussianTeams(int n, double mean, double sigma, double xmin, double xmax){

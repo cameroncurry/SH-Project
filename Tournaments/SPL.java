@@ -14,7 +14,8 @@ public class SPL extends Tournament {
 	//and that an equal number of home and away games are played
 	
 	public void run(){
-		
+		for(int l=0;l<1;l++){
+			
 		for(int k=0;k<3;k++){ //repeat 3 times
 			//play everyone once
 			for(int i=0;i<teams.length;i++){
@@ -45,7 +46,7 @@ public class SPL extends Tournament {
 				}
 			}
 		}
-		
+		}
 		
 	}
 
