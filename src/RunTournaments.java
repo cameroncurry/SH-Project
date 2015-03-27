@@ -60,13 +60,13 @@ public class RunTournaments {
 		
 		Team[] eplTeams = Tournament.createSkewTeams(20,0.88658947,0.90241807,4.25338912, 0,3);
 		Team[] splTeams = Tournament.createSkewTeams(12,0.88658947,0.90241807,4.25338912, 0,3);
-		//Team[] swissTeams = Tournament.createSkewTeams(12,0.88658947,0.90241807,4.25338912, 0,3);
-		//Team[] wcTeams = Tournament.createSkewTeams(32,0.88658947,0.90241807,4.25338912, 0,3);
+		Team[] swissTeams = Tournament.createSkewTeams(20,0.88658947,0.90241807,4.25338912, 0,3);
+		Team[] wcTeams = Tournament.createSkewTeams(32,0.88658947,0.90241807,4.25338912, 0,3);
 		
 		Tournament epl = new EPL(eplTeams);
 		Tournament spl = new SPL(splTeams);
-		//Tournament swiss = new Swiss(swissTeams,38);
-		//Tournament worldCup = new WorldCup(wcTeams);
+		Tournament swiss = new Swiss(swissTeams,38);
+		Tournament worldCup = new WorldCup(wcTeams);
 		
 		
 		//thread pool to run tournaments concurrently 
@@ -78,13 +78,14 @@ public class RunTournaments {
 		
 		TournamentCallable b = new TournamentCallable("SPL",spl,10000);
 		Future<Double[]> splFuture = pool.submit(b);
-		/*
+		
+		
 		TournamentCallable c = new TournamentCallable("Swiss",swiss,10000);
 		Future<Double[]> swissFuture = pool.submit(c);
 		
 		TournamentCallable d = new TournamentCallable("World-Cup",worldCup,10000);
 		Future<Double[]> wcFuture = pool.submit(d);
-		*/
+		
 		
 		
 		//print results to screen
@@ -92,14 +93,14 @@ public class RunTournaments {
 		
 		printResult("EPL",eplFuture,epl);
 		printResult("SPL",splFuture,spl);
-		//printResult("Swiss",swissFuture,swiss);
-		//printResult("World Cup",wcFuture,worldCup);
+		printResult("Swiss",swissFuture,swiss);
+		printResult("World Cup",wcFuture,worldCup);
 		
 		
 		
 		pool.shutdown();
 		
-		//plotHistogram(a,b,d,c);
+		plotHistogram(a,b,c,d);
 		
 	}
 	

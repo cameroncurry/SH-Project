@@ -59,7 +59,7 @@ public class Tournament implements Runnable {
 		
 		int goalsA = 0;
 		int goalsB = 0;
-		/*
+		
 		if(a.skill() > b.skill()){
 			//calculate relative skill vs. opponent
 			double relativeSkillA = (a.skill()-meanX)*cosTheta - (b.skill()-meanY)*sinTheta;
@@ -79,9 +79,9 @@ public class Tournament implements Runnable {
 			poisson.setLambda(relativeSkillB+meanY);
 			goalsB = poisson.nextInt();
 		}
-		*/
-		goalsA = a.playOpponent(poisson, b);
-		goalsB = b.playOpponent(poisson, a);
+		
+		//goalsA = a.playOpponent(poisson, b);
+		//goalsB = b.playOpponent(poisson, a);
 		
 		
 		//tie

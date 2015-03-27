@@ -43,6 +43,6 @@ def maxDev(N):
     compliment = reverse(expected)
     return tournamentDev(expected, compliment)
 
-#print maxDev(12)
+print maxDev(32)
 
     
