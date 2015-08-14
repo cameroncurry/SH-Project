@@ -89,19 +89,14 @@ public class RunTournaments {
 		
 		
 		//print results to screen
-		//System.out.printf("%.4f\t%.4f\t%.4f\t%.4f\n",eplFuture.get()[0], eplFuture.get()[1], splFuture.get()[0], splFuture.get()[1]);
 		
 		printResult("EPL",eplFuture,epl);
 		printResult("SPL",splFuture,spl);
 		printResult("Swiss",swissFuture,swiss);
 		printResult("World Cup",wcFuture,worldCup);
 		
-		
-		
 		pool.shutdown();
-		
 		plotHistogram(a,b,c,d);
-		
 	}
 	
 	public static void printResult(String name, Future<Double[]> result, Tournament t) throws InterruptedException, ExecutionException{

@@ -26,7 +26,8 @@ abstract class IntegerRandomGenerator {
 		double randY2 = 0.0;
 		
 		do{
-			int randX = random.nextInt(rangeMax+1)+rangeMin; //random int between min and max (both inclusive)
+			//random int between min and max (both inclusive)
+			int randX = random.nextInt(rangeMax+1)+rangeMin;
 			
 			randY1 = this.evaluate(randX);
 			randY2 = random.nextDouble()*fmax;

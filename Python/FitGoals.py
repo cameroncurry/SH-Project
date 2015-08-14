@@ -83,7 +83,6 @@ pl.plot(x,hist_y,'black',linewidth=2)
 pl.plot(x,sim_y,'black',linewidth=2)
 
 pl.title('Simulated vs. Historical Goal Distribution')
-#pl.title('EPL Goals For vs. Goals Against 1995-2014')
 pl.xlabel('Goals For')
 pl.ylabel('Goals Against')
 pl.legend()
